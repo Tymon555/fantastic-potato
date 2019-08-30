@@ -15,14 +15,18 @@ public class Player : NetworkBehaviour
         rb2D = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    public virtual void FixedUpdate()
+    {
+        UpdateMovement(rb2D);
+    }
+    public void UpdateMovement(Rigidbody2D rb2D)
     {
         if (!isLocalPlayer) return;
         int horizontal = 0;
         int vertical = 0;
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
         vertical = (int)(Input.GetAxisRaw("Vertical"));
-        if(vertical != 0) rb2D.AddForce(transform.up * thrust * vertical);
+        if (vertical != 0) rb2D.AddForce(transform.up * thrust * vertical);
         if (horizontal != 0) rb2D.AddTorque(-horizontal * rotateSpeed);
     }
 
