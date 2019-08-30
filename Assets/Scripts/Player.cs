@@ -25,4 +25,9 @@ public class Player : NetworkBehaviour
         if(vertical != 0) rb2D.AddForce(transform.up * thrust * vertical);
         if (horizontal != 0) rb2D.AddTorque(-horizontal * rotateSpeed);
     }
+
+    public override void OnStartLocalPlayer()
+    {
+        Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+    }
 }
