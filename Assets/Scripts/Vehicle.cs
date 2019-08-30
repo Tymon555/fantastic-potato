@@ -38,7 +38,7 @@ public class Vehicle : Player
 
     public override void FixedUpdate()
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || dead) return;
         base.UpdateMovement(vehicleRb);
 
         //weapons 

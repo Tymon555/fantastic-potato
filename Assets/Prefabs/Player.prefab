@@ -201,3 +201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrust: 2
   rotateSpeed: 0.4
+  health: 100
+  dead: 0
+  healthBar: {fileID: 2190366470297607135, guid: 7dd080fb2c978924685ce25e5a9ddc77,
+    type: 3}

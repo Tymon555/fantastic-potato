@@ -7,8 +7,9 @@ public class Player : NetworkBehaviour
 {
     public float thrust = 1f;
     public float rotateSpeed = 0.5f;
-    [SyncVar] public int health = 100;
+    [SyncVar] public int health = 15;
     public bool dead = false;
+    public GameObject healthBar;
 
     private Rigidbody2D playerRb;
 
@@ -35,12 +36,13 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+        CmdCreateHealthBar();
     }
 
     [ClientRpc]
-    void RpcDamage(int amount)
+    void RpcDamage(int hp)
     {
-        Debug.Log("Took damage:" + amount);
+        healthBar.transform.localScale = new Vector3(0.3333f * hp, 0.5f, 1);
     }
     public void TakeDamage(int amount)
     {
@@ -50,6 +52,7 @@ public class Player : NetworkBehaviour
         health -= amount;
         health = Mathf.Max(0, health);
         if (health == 0) dead = true;
+        RpcDamage(health);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -59,5 +62,15 @@ public class Player : NetworkBehaviour
             TakeDamage(1);
             RpcDamage(1);
         }
+    }
+    [Command]
+    void CmdCreateHealthBar()
+    {
+        GameObject bar = Instantiate(
+            healthBar,
+            transform.position + new Vector3(4f, 2f, 0f),
+            Quaternion.identity);
+        bar.GetComponent<HealthBarFollow>().SetPlayerObject(this.gameObject);
+        NetworkServer.Spawn(bar);
     }
 }
