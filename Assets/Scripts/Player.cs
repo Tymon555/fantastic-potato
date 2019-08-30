@@ -7,6 +7,8 @@ public class Player : NetworkBehaviour
 {
     public float thrust = 1f;
     public float rotateSpeed = 0.5f;
+    [SyncVar] public int health = 100;
+    public bool dead = false;
 
     private Rigidbody2D playerRb;
 
@@ -21,7 +23,7 @@ public class Player : NetworkBehaviour
     }
     public void UpdateMovement(Rigidbody2D rb2D)
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer || dead) return;
         int horizontal = 0;
         int vertical = 0;
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
@@ -33,5 +35,29 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
+    }
+
+    [ClientRpc]
+    void RpcDamage(int amount)
+    {
+        Debug.Log("Took damage:" + amount);
+    }
+    public void TakeDamage(int amount)
+    {
+        if (!isServer)
+            return;
+
+        health -= amount;
+        health = Mathf.Max(0, health);
+        if (health == 0) dead = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Laser")
+        {
+            TakeDamage(1);
+            RpcDamage(1);
+        }
     }
 }
