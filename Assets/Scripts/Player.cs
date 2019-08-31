@@ -5,13 +5,15 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
+    public int collisionDmgMulitiplier = 1;
     public float thrust = 1f;
     public float rotateSpeed = 0.5f;
-    [SyncVar] public int health = 15;
+    [SyncVar] public int health = 20;
     public bool dead = false;
     public GameObject healthBar;
 
     private Rigidbody2D playerRb;
+    private GameObject bar;
 
     void Start()
     {
@@ -39,20 +41,24 @@ public class Player : NetworkBehaviour
         CmdCreateHealthBar();
     }
 
-    [ClientRpc]
-    void RpcDamage(int hp)
-    {
-        healthBar.transform.localScale = new Vector3(0.3333f * hp, 0.5f, 1);
-    }
     public void TakeDamage(int amount)
     {
         if (!isServer)
             return;
 
+        amount = Mathf.Min(amount, health);
         health -= amount;
-        health = Mathf.Max(0, health);
         if (health == 0) dead = true;
-        RpcDamage(health);
+        bar.transform.localScale -= new Vector3(amount * 0.2f, 0f, 0f);
+        
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.relativeVelocity.magnitude > 2)
+        {
+            TakeDamage((int)collision.relativeVelocity.magnitude * collisionDmgMulitiplier);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,17 +66,16 @@ public class Player : NetworkBehaviour
         if(collision.tag == "Laser")
         {
             TakeDamage(1);
-            RpcDamage(1);
         }
     }
     [Command]
     void CmdCreateHealthBar()
     {
-        GameObject bar = Instantiate(
+        bar = Instantiate(
             healthBar,
-            transform.position + new Vector3(4f, 2f, 0f),
+            transform.position + new Vector3(0f, 2f, 0f),
             Quaternion.identity);
-        bar.GetComponent<HealthBarFollow>().SetPlayerObject(this.gameObject);
+        bar.GetComponent<HealthBarFollow>().SetPlayerObject(this.transform);
         NetworkServer.Spawn(bar);
     }
 }

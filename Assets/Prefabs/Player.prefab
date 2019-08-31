@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 2
-  m_SendInterval: 0.1
+  m_SendInterval: 0.06666667
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
@@ -199,9 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf33624ec2981d44bd5ed1c80b09f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionDmgMulitiplier: 1
   thrust: 2
   rotateSpeed: 0.4
-  health: 100
+  health: 20
   dead: 0
   healthBar: {fileID: 2190366470297607135, guid: 7dd080fb2c978924685ce25e5a9ddc77,
     type: 3}

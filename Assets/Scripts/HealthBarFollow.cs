@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class HealthBarFollow : MonoBehaviour
 {
-    public GameObject playerObject;
+    public Transform playerObject;
 
     void Update()
     {
-        transform.position = playerObject.transform.position + new Vector3(4f, 2f, 0f);
+        if(playerObject != null)
+            transform.position = playerObject.position + new Vector3(0f, 2f, 0f);
     }
 
-    public void SetPlayerObject(GameObject obj)
+    public void SetPlayerObject(Transform obj)
     {
         playerObject = obj;
     }
