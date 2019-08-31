@@ -6,3 +6,7 @@
 Temp/
 
 Library/CrashedAssetImports.txt
+
+Assembly-CSharp.csproj
+
+Library/

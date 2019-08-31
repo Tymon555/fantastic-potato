@@ -33,6 +33,7 @@ public class Vehicle : Player
 
     public override void FixedUpdate()
     {
+        if (!isLocalPlayer) return;
         base.UpdateMovement(rb2D);
 
         //weapons 
