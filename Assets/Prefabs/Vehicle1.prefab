@@ -175,8 +175,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrust: 1
   rotateSpeed: 0.5
-  thrust: 1
-  rotateSpeed: 0.5
   laserPrefab: {fileID: 1900651064757049498, guid: 8dc1a6c87256cc048920d712f4ab1362,
     type: 3}
 --- !u!60 &-8265618392335430212

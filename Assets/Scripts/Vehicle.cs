@@ -7,24 +7,30 @@ public class Vehicle : Player
 {
     protected float laserSpeed = 10f;
     protected float laserTime = 1f;
+    private float fireRate = 1f;
 
     private Rigidbody2D vehicleRb;
     public GameObject laserPrefab;
+    private bool allowFire = true;
  
 
     [Command]
     void CmdDoFire(float lifeTime)
     {
+        allowFire = false;
         GameObject laser = (GameObject)Instantiate(
             laserPrefab,
-            transform.position + transform.right,
+            transform.position + transform.up,
             Quaternion.identity);
+        Physics2D.IgnoreCollision(laser.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 
         var bullet2D = laser.GetComponent<Rigidbody2D>();
-        bullet2D.velocity = transform.right * laserSpeed;
+        bullet2D.velocity = transform.up * laserSpeed;
         Destroy(laser, lifeTime);
 
         NetworkServer.Spawn(laser);
+        yield return new WaitForSeconds(fireRate);
+        allowFire = true;
     }
     void Start()
     {
@@ -38,7 +44,7 @@ public class Vehicle : Player
 
         //weapons 
         int laser = (int)(Input.GetAxisRaw("Fire1"));
-        if(laser != 0)
+        if(laser != 0 && allowFire)
         {
             Debug.Log("shots fired");
             CmdDoFire(laserTime);

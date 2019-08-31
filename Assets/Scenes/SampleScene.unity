@@ -623,5 +623,11 @@ PrefabInstance:
       propertyPath: m_AutoCreatePlayer
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8523214684535052031, guid: c20276005579815468dc718df2345d3f,
+        type: 3}
+      propertyPath: m_PlayerPrefab
+      value: 
+      objectReference: {fileID: 4224251797799905139, guid: b5d7b05542d6732418972a82e5698b36,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c20276005579815468dc718df2345d3f, type: 3}

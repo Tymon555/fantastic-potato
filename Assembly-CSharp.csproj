@@ -64,7 +64,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\RigidBody2D.cs" />
     <Compile Include="Assets\Scripts\Vehicle.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>E:/projects/fantastic-potato/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
