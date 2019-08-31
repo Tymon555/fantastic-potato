@@ -20,7 +20,7 @@ public class Vehicle : Player
         allowFire = false;
         GameObject laser = (GameObject)Instantiate(
             laserPrefab,
-            transform.position + transform.up,
+            transform.position,
             Quaternion.identity);
         Physics2D.IgnoreCollision(laser.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 
@@ -29,8 +29,7 @@ public class Vehicle : Player
         Destroy(laser, lifeTime);
 
         NetworkServer.Spawn(laser);
-        yield return new WaitForSeconds(fireRate);
-        allowFire = true;
+        Invoke("refreshFire", fireRate);
     }
     void Start()
     {
@@ -44,10 +43,14 @@ public class Vehicle : Player
 
         //weapons 
         int laser = (int)(Input.GetAxisRaw("Fire1"));
-        if(laser != 0 && allowFire)
+        if((laser != 0) && allowFire)
         {
             Debug.Log("shots fired");
             CmdDoFire(laserTime);
         }
+    }
+    private void refreshFire()
+    {
+        allowFire = true;
     }
 }
