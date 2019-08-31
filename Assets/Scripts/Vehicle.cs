@@ -21,7 +21,7 @@ public class Vehicle : Player
         GameObject laser = (GameObject)Instantiate(
             laserPrefab,
             transform.position,
-            Quaternion.identity);
+            transform.rotation);
         Physics2D.IgnoreCollision(laser.GetComponent<Collider2D>(), GetComponent<Collider2D>());
 
         var bullet2D = laser.GetComponent<Rigidbody2D>();
