@@ -8,7 +8,7 @@ public class Vehicle : Player
     protected float laserSpeed = 10f;
     protected float laserTime = 1f;
 
-    private Rigidbody2D rb2D;
+    private Rigidbody2D vehicleRb;
     public GameObject laserPrefab;
  
 
@@ -28,13 +28,13 @@ public class Vehicle : Player
     }
     void Start()
     {
-        rb2D = GetComponent<Rigidbody2D>();
+        vehicleRb = GetComponent<Rigidbody2D>();
     }
 
     public override void FixedUpdate()
     {
         if (!isLocalPlayer) return;
-        base.UpdateMovement(rb2D);
+        base.UpdateMovement(vehicleRb);
 
         //weapons 
         int laser = (int)(Input.GetAxisRaw("Fire1"));

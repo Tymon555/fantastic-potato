@@ -8,16 +8,16 @@ public class Player : NetworkBehaviour
     public float thrust = 1f;
     public float rotateSpeed = 0.5f;
 
-    private Rigidbody2D rb2D;
+    private Rigidbody2D playerRb;
 
     void Start()
     {
-        rb2D = GetComponent<Rigidbody2D>();
+        playerRb = GetComponent<Rigidbody2D>();
     }
 
     public virtual void FixedUpdate()
     {
-        UpdateMovement(rb2D);
+        UpdateMovement(playerRb);
     }
     public void UpdateMovement(Rigidbody2D rb2D)
     {
