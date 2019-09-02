@@ -5,15 +5,18 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
+    public const int maxHealth = 20;
+
     public int collisionDmgMulitiplier = 1;
     public float thrust = 1f;
     public float rotateSpeed = 0.5f;
-    [SyncVar] public int health = 20;
-    public bool dead = false;
+    [SyncVar(hook = "OnChangeHealth")] public int currHealth = maxHealth;
+    [SyncVar] public bool dead = false;
     public GameObject healthBar;
 
     private Rigidbody2D playerRb;
     private GameObject bar;
+    private HealthBarFollow barFollow;
 
     void Start()
     {
@@ -46,11 +49,20 @@ public class Player : NetworkBehaviour
         if (!isServer)
             return;
 
-        amount = Mathf.Min(amount, health);
-        health -= amount;
-        if (health == 0) dead = true;
-        bar.transform.localScale -= new Vector3(amount * 0.2f, 0f, 0f);
-        
+        amount = Mathf.Min(amount, currHealth);
+        currHealth -= amount;
+        CheckIfDead();
+        barFollow.ShortenScale(amount * (3f / maxHealth));
+    }
+
+    private void CheckIfDead()
+    {
+        if(currHealth <= 0)
+        {
+            dead = true;
+            bar.SetActive(false);
+            this.gameObject.SetActive(false);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -75,7 +87,13 @@ public class Player : NetworkBehaviour
             healthBar,
             transform.position + new Vector3(0f, 2f, 0f),
             Quaternion.identity);
-        bar.GetComponent<HealthBarFollow>().SetPlayerObject(this.transform);
+        barFollow = bar.GetComponent<HealthBarFollow>();
+        barFollow.SetPlayerObject(this.transform);
         NetworkServer.Spawn(bar);
+    }
+
+    void OnChangeHealth(int health)
+    {
+        currHealth = health;
     }
 }

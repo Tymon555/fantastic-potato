@@ -17,7 +17,7 @@ public class Vehicle : Player
     [Command]
     void CmdDoFire(float lifeTime)
     {
-        allowFire = false;
+        //allowFire = false;
         GameObject laser = (GameObject)Instantiate(
             laserPrefab,
             transform.position,
@@ -29,7 +29,7 @@ public class Vehicle : Player
         Destroy(laser, lifeTime);
 
         NetworkServer.Spawn(laser);
-        Invoke("refreshFire", fireRate);
+        //Invoke("refreshFire", fireRate);
     }
     void Start()
     {
@@ -38,6 +38,7 @@ public class Vehicle : Player
 
     public override void FixedUpdate()
     {
+        if (dead) this.gameObject.SetActive(false);
         if (!isLocalPlayer || dead) return;
         base.UpdateMovement(vehicleRb);
 
@@ -46,7 +47,9 @@ public class Vehicle : Player
         if((laser != 0) && allowFire)
         {
             Debug.Log("shots fired");
+            allowFire = false;
             CmdDoFire(laserTime);
+            Invoke("refreshFire", fireRate);
         }
     }
     private void refreshFire()
