@@ -92,6 +92,12 @@ public class Player : NetworkBehaviour
         NetworkServer.Spawn(bar);
     }
 
+    private void OnDestroy()
+    {
+        if (bar != null)
+             Destroy(bar);
+    }
+
     void OnChangeHealth(int health)
     {
         currHealth = health;

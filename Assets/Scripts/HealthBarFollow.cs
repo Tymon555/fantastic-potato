@@ -15,7 +15,7 @@ public class HealthBarFollow : NetworkBehaviour
 
     void Update()
     {
-        if(playerObject != null)
+        if (playerObject != null)
             transform.position = playerObject.position + new Vector3(0f, 2f, 0f);
     }
 
