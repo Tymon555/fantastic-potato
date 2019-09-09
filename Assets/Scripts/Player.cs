@@ -5,101 +5,120 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
-    public const int maxHealth = 20;
+    public GameObject chooseVehicle;
+    public static int chosenVehicle = -1;
+    public GameObject[] Vehicles;
 
-    public int collisionDmgMulitiplier = 1;
-    public float thrust = 1f;
-    public float rotateSpeed = 0.5f;
-    [SyncVar(hook = "OnChangeHealth")] public int currHealth = maxHealth;
-    [SyncVar] public bool dead = false;
-    public GameObject healthBar;
+    private Vehicle vehicle;
+    private GameObject vehicleObject;
+    private Rigidbody2D vehicleRb;
+    private Transform vehicleTransform;
 
-    private Rigidbody2D playerRb;
-    private GameObject bar;
-    private HealthBarFollow barFollow;
+    private bool allowFire = true;
+    private bool allowAbility1 = true;
+    private bool allowAbility2 = true;
 
-    void Start()
+    public override void OnStartLocalPlayer()
     {
-        playerRb = GetComponent<Rigidbody2D>();
+        base.OnStartLocalPlayer();
+        Instantiate(chooseVehicle, new Vector3(0f, 0f, 0f), Quaternion.identity);
     }
 
-    public virtual void FixedUpdate()
+    public void SetChosenVehicle(int nr)
     {
-        UpdateMovement(playerRb);
+        chosenVehicle = nr;
     }
-    public void UpdateMovement(Rigidbody2D rb2D)
+
+    private void SetVehicle()
     {
-        if (!isLocalPlayer || dead) return;
+        Debug.Log("Setting vehicle " + chosenVehicle);
+        CmdSpawnVehicle(chosenVehicle);
+        chosenVehicle = -1;
+    }
+
+    [Command]
+    private void CmdSpawnVehicle(int choice)
+    {
+        vehicleObject = Instantiate(Vehicles[choice], this.transform.position, Quaternion.identity);
+        NetworkServer.SpawnWithClientAuthority(vehicleObject, connectionToClient);
+        RpcGetVehicle(vehicleObject);
+    }
+
+    [ClientRpc]
+    private void RpcGetVehicle(GameObject refr)
+    {
+        if (!isLocalPlayer) return;
+        Debug.Log("recieved");
+        vehicleObject = refr;
+        vehicleRb = vehicleObject.GetComponent<Rigidbody2D>();
+        vehicle = vehicleObject.GetComponent<Vehicle>();
+        vehicleTransform = vehicleObject.GetComponent<Transform>();
+        vehicle.CmdCreateHealthBar();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isLocalPlayer)
+            return;
+
+        if (vehicle == null && chosenVehicle != -1)
+            SetVehicle();
+
+        if (vehicle == null || vehicle.dead)
+            return;
+
+        //moving
         int horizontal = 0;
         int vertical = 0;
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
         vertical = (int)(Input.GetAxisRaw("Vertical"));
-        if (vertical != 0) rb2D.AddForce(transform.up * thrust * vertical);
-        if (horizontal != 0) rb2D.AddTorque(-horizontal * rotateSpeed);
-    }
+        if (vertical != 0) vehicleRb.AddForce(vehicleTransform.up * vehicle.thrust * vertical);
+        if (horizontal != 0) vehicleRb.AddTorque(-horizontal * vehicle.rotateSpeed);
 
-    public override void OnStartLocalPlayer()
-    {
-        Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
-        CmdCreateHealthBar();
-    }
-
-    public void TakeDamage(int amount)
-    {
-        if (!isServer)
-            return;
-
-        amount = Mathf.Min(amount, currHealth);
-        currHealth -= amount;
-        CheckIfDead();
-        barFollow.ShortenScale(amount * (3f / maxHealth));
-    }
-
-    private void CheckIfDead()
-    {
-        if(currHealth <= 0)
+        //shooting
+        int shot = (int)(Input.GetAxisRaw("Fire1"));
+        if ((shot != 0) && allowFire)
         {
-            dead = true;
-            bar.SetActive(false);
-            this.gameObject.SetActive(false);
+            Debug.Log("shots fired");
+            allowFire = false;
+            vehicle.CmdDoFire();
+            Invoke("RefreshFire", vehicle.fireRate);
+        }
+
+        //Ability1
+        if (Input.GetKeyDown(KeyCode.Z) && allowAbility1)
+        {
+            allowAbility1 = false;
+            vehicle.CmdAbility1();
+            Invoke("RefreshAbility1", vehicle.ability1Cooldown);
+        }
+
+        //Ability2
+        if (Input.GetKeyDown(KeyCode.X) && allowAbility2)
+        {
+            allowAbility2 = false;
+            vehicle.CmdAbility2();
+            Invoke("RefreshAbility2", vehicle.ability2Cooldown);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void RefreshFire()
     {
-        if (collision.relativeVelocity.magnitude > 2)
-        {
-            TakeDamage((int)collision.relativeVelocity.magnitude * collisionDmgMulitiplier);
-        }
+        allowFire = true;
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void RefreshAbility1()
     {
-        if(collision.tag == "Laser")
-        {
-            TakeDamage(1);
-        }
+        allowAbility1 = true;
     }
-    [Command]
-    void CmdCreateHealthBar()
+    private void RefreshAbility2()
     {
-        bar = Instantiate(
-            healthBar,
-            transform.position + new Vector3(0f, 2f, 0f),
-            Quaternion.identity);
-        barFollow = bar.GetComponent<HealthBarFollow>();
-        barFollow.SetPlayerObject(this.transform);
-        NetworkServer.Spawn(bar);
+        allowAbility2 = true;
     }
 
     private void OnDestroy()
     {
-        if (bar != null)
-             Destroy(bar);
+        if (vehicleObject != null)
+            Destroy(vehicleObject);
     }
 
-    void OnChangeHealth(int health)
-    {
-        currHealth = health;
-    }
 }

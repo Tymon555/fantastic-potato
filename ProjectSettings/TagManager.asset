@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Laser
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -47,4 +47,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2311849921
+    locked: 0
+  - name: UI
+    uniqueID: 1775339965
     locked: 0

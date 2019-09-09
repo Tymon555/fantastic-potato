@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5654395810086800659}
   - component: {fileID: 3195138736146472942}
   - component: {fileID: -4038611459338231472}
-  - component: {fileID: 4652630092851038098}
   - component: {fileID: -8265618392335430212}
+  - component: {fileID: 3554171102930894468}
   m_Layer: 0
   m_Name: Vehicle1
   m_TagString: Untagged
@@ -161,27 +161,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &4652630092851038098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4224251797799905139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a0f8a9153ced404aac0a63ab5772a10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collisionDmgMulitiplier: 1
-  thrust: 1
-  rotateSpeed: 0.5
-  currHealth: 20
-  dead: 0
-  healthBar: {fileID: 2190366470297607135, guid: 7dd080fb2c978924685ce25e5a9ddc77,
-    type: 3}
-  laserPrefab: {fileID: 1900651064757049498, guid: 8dc1a6c87256cc048920d712f4ab1362,
-    type: 3}
 --- !u!60 &-8265618392335430212
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -213,3 +192,30 @@ PolygonCollider2D:
       - {x: 0.00000004371139, y: -0.5}
       - {x: 0.43301272, y: -0.24999996}
       - {x: 0.43301272, y: 0.24999996}
+--- !u!114 &3554171102930894468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224251797799905139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c65b93d5ff578c14b96f9f60899cc238, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionDmgMulitiplier: 1
+  maxHealth: 0
+  fireRate: 0
+  thrust: 0
+  rotateSpeed: 0
+  projectileSpeed: 0
+  projectileTime: 0
+  ability1Cooldown: 0
+  ability2Cooldown: 0
+  weaponPrefab: {fileID: 1900651064757049498, guid: 8dc1a6c87256cc048920d712f4ab1362,
+    type: 3}
+  healthBar: {fileID: 2190366470297607135, guid: 7dd080fb2c978924685ce25e5a9ddc77,
+    type: 3}
+  currHealth: 0
+  dead: 0
