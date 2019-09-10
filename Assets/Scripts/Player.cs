@@ -86,16 +86,18 @@ public class Player : NetworkBehaviour
         }
 
         //Ability1
-        if (Input.GetKeyDown(KeyCode.Z) && allowAbility1)
+        if (Input.GetKeyDown(KeyCode.O) && allowAbility1)
         {
+            Debug.Log("Ability 1");
             allowAbility1 = false;
             vehicle.CmdAbility1();
             Invoke("RefreshAbility1", vehicle.ability1Cooldown);
         }
 
         //Ability2
-        if (Input.GetKeyDown(KeyCode.X) && allowAbility2)
+        if (Input.GetKeyDown(KeyCode.P) && allowAbility2)
         {
+            Debug.Log("Ability 2");
             allowAbility2 = false;
             vehicle.CmdAbility2();
             Invoke("RefreshAbility2", vehicle.ability2Cooldown);

@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\ChooseVehicle.cs" />
+    <Compile Include="Assets\Scripts\Damagable.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\HealthBarFollow.cs" />
     <Compile Include="Assets\Scripts\HexagonVehicle.cs" />

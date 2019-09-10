@@ -24,11 +24,11 @@ public class HexagonVehicle : Vehicle
 
     public override void CmdAbility1()
     {
-        Debug.Log("Ability 1");
+        //do something
     }
 
     public override void CmdAbility2()
     {
-        Debug.Log("Ability 2");
+        //do something 
     }
 }
