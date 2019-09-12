@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class HexagonVehicle : Vehicle
 {
+    public GameObject duckPrefab;
+
+    private float duckSpeed = 10f;
+    private float duckTime = 6f;
+
     public override void Awake()
     {
         base.Awake();
@@ -15,6 +21,7 @@ public class HexagonVehicle : Vehicle
         rotateSpeed = 1f;
         projectileSpeed = 12f;
         projectileTime = 1f;
+        ability1Cooldown = 30f;
     }
 
     public override void TakeDamage(int amount)
@@ -22,12 +29,27 @@ public class HexagonVehicle : Vehicle
         base.TakeDamage(amount);
     }
 
-    public override void CmdAbility1()
+    public override void Ability1()
     {
-        //do something
+        CmdAbility1();
     }
 
-    public override void CmdAbility2()
+    [Command]
+    private void CmdAbility1()
+    {
+        GameObject duck = Instantiate(
+            duckPrefab,
+            transform.position + transform.up * 2f,
+            transform.rotation
+        );
+        //Physics2D.IgnoreCollision(duck.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        duck.GetComponent<Rigidbody2D>().velocity = transform.up * duckSpeed;
+        Destroy(duck, duckTime);
+
+        NetworkServer.Spawn(duck);
+    }
+
+    public override void Ability2()
     {
         //do something 
     }

@@ -206,6 +206,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionDmgMulitiplier: 1
   maxHealth: 0
+  currHealth: 0
+  dead: 0
   fireRate: 0
   thrust: 0
   rotateSpeed: 0
@@ -217,5 +219,5 @@ MonoBehaviour:
     type: 3}
   healthBar: {fileID: 2190366470297607135, guid: 7dd080fb2c978924685ce25e5a9ddc77,
     type: 3}
-  currHealth: 0
-  dead: 0
+  duckPrefab: {fileID: 5084438230947710945, guid: 832cfaad3ef3de8408b54fc181fb5b8a,
+    type: 3}

@@ -22,8 +22,12 @@ public class Vehicle : Damagable
 
     public virtual void Awake()
     {
-        Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
         //override this and set public values of this and damagable
+    }
+
+    public void SetCamera()
+    {
+        Camera.main.GetComponent<CameraFollow>().SetTarget(gameObject.transform);
     }
 
     public override void TakeDamage(int amount)
@@ -56,16 +60,14 @@ public class Vehicle : Damagable
         NetworkServer.Spawn(projectile);
     }
 
-    [Command]
-    public virtual void CmdAbility1()
+    public virtual void Ability1()
     {
-        //override
+        //virtual commands are not supported - override this and call a command
     }
 
-    [Command]
-    public virtual void CmdAbility2()
+    public virtual void Ability2()
     {
-        //override
+        //^
     }
 
     [Command]

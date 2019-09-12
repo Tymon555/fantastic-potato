@@ -54,6 +54,7 @@ public class Player : NetworkBehaviour
         vehicle = vehicleObject.GetComponent<Vehicle>();
         vehicleTransform = vehicleObject.GetComponent<Transform>();
         vehicle.CmdCreateHealthBar();
+        vehicle.SetCamera();
     }
 
     private void FixedUpdate()
@@ -90,7 +91,7 @@ public class Player : NetworkBehaviour
         {
             Debug.Log("Ability 1");
             allowAbility1 = false;
-            vehicle.CmdAbility1();
+            vehicle.Ability1();
             Invoke("RefreshAbility1", vehicle.ability1Cooldown);
         }
 
@@ -99,7 +100,7 @@ public class Player : NetworkBehaviour
         {
             Debug.Log("Ability 2");
             allowAbility2 = false;
-            vehicle.CmdAbility2();
+            vehicle.Ability2();
             Invoke("RefreshAbility2", vehicle.ability2Cooldown);
         }
     }
