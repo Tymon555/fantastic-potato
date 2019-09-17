@@ -11,6 +11,7 @@ public class Player : NetworkBehaviour
 
     private Vehicle vehicle;
     private GameObject vehicleObject;
+    private GameObject myChooseVehicle;
     private Rigidbody2D vehicleRb;
     private Transform vehicleTransform;
 
@@ -21,7 +22,7 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        Instantiate(chooseVehicle, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        myChooseVehicle = Instantiate(chooseVehicle, new Vector3(0f, 0f, 0f), Quaternion.identity);
     }
 
     public void SetChosenVehicle(int nr)
@@ -122,6 +123,9 @@ public class Player : NetworkBehaviour
     {
         if (vehicleObject != null)
             Destroy(vehicleObject);
+
+        if (myChooseVehicle != null)
+            Destroy(myChooseVehicle);
     }
 
 }

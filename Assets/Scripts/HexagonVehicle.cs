@@ -17,8 +17,8 @@ public class HexagonVehicle : Vehicle
         currHealth = maxHealth;
 
         fireRate = 1f;
-        thrust = 1.5f;
-        rotateSpeed = 1f;
+        thrust = 3f;
+        rotateSpeed = 1.5f;
         projectileSpeed = 12f;
         projectileTime = 1f;
         ability1Cooldown = 30f;
